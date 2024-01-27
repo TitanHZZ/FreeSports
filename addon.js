@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+
+const { googleImage } = require("@bochilteam/scraper-images");
 const { addonBuilder } = require("stremio-addon-sdk")
 const request = require("request");
 const cheerio = require("cheerio");
@@ -48,6 +51,27 @@ function get_streams_data() {
     });
 }
 
+function arraysEqualIgnoreOrder(arr1, arr2) {
+    // check if arrays have the same length
+    if (arr1.length !== arr2.length) {
+        return false;
+    }
+
+    // sort both arrays
+    arr1.sort();
+    arr2.sort();
+
+    // compare sorted arrays element by element
+    for (let i = 0; i < sortedArr1.length; i++) {
+        if (sortedArr1[i] !== sortedArr2[i]) {
+            return false;
+        }
+    }
+
+    // all elements are equal
+    return true;
+}
+
 // Docs: https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/responses/manifest.md
 const manifest = {
     "id": "community.FreeSports",
@@ -67,7 +91,48 @@ const manifest = {
     "description": "Watch your favourite sports."
 }
 const builder = new addonBuilder(manifest)
-let streams_info = [];
+let streams_info = []; // used to store the names and stream page urls
+let streams_metadata = []; // used to store the metadata for the streams
+
+// loop to keep streams_info always up to date
+/*(async function updateStreamsMetadata() {
+    const new_streams_info = await get_streams_data();
+    const new_streams_names = Object.keys(new_streams_info);
+    const old_streams_names = Object.keys(streams_info);
+
+    // if arrays are equal, then there is nothing to do
+    if (arraysEqualIgnoreOrder(old_streams_names, new_streams_names)) {
+        console.log("Metadate is up to date.");
+        setTimeout(updateStreamsMetadata, 10000);
+    } else {
+        console.log("Got new streams, updating metadata.");
+
+        // get new metadata
+        let new_streams_metadata = [];
+        (new_streams_names).map((el) => {
+            googleImage(`sports ${el} poster`).then((poster) => {
+                console.log(poster[0]);
+                streams_metadata.push({
+                    id: el,
+                    type: "sports",
+                    name: el,
+                    poster: poster.length ? poster[0] : ""
+                });
+            }).catch(() => {
+                streams_metadata.push({
+                    id: el,
+                    type: "sports",
+                    name: el,
+                    poster: ""
+                });
+            });
+
+            // update the actual arrays
+            streams_info = new_streams_info;
+            streams_metadata = new_streams_metadata;
+        });
+    }
+})();*/
 
 // TODO: hanlde the skip parameter in the extra section
 // TODO: custom poster for each stream
@@ -80,9 +145,9 @@ builder.defineCatalogHandler(async (args) => {
     // console.log(args);
     // get all the data about the available streams and return it
     let result = [];
-    streams_info = await get_streams_data();
+    // streams_info = await get_streams_data();
     // console.log(streams_info);
-    Object.keys(streams_info).forEach((el) => {
+    /*Object.keys(streams_info).forEach((el) => {
         result.push({
             id: el,
             type: "sports",
@@ -90,6 +155,18 @@ builder.defineCatalogHandler(async (args) => {
             poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/220px-Big_buck_bunny_poster_big.jpg"
         });
     });
+    await Promise.all(Object.keys(streams_info).map(async (el) => {
+        const poster = await googleImage(`sports ${el} poster`).catch((e) => { console.log(e); });
+        if (poster) {
+            // console.log(poster[0]);
+            result.push({
+                id: el,
+                type: "sports",
+                name: el,
+                poster: poster[0]
+            });
+        }
+    }));*/
 
     return Promise.resolve({ metas: result });
 });
