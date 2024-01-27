@@ -32,7 +32,6 @@ function get_stream_url(stream_page_url) {
 }
 
 app.head("/", (_, res) => {
-    console.log("got head");
     res.setHeader("Content-Type", "video/mp4");
     res.setHeader("Cache-Control", "no-cache");
     res.setHeader("Connection", "keep-alive");
@@ -51,11 +50,12 @@ app.get("/", async (req, res) => {
     // avoid multiple connections to same stremio app instance
     if (req.headers.connection) {
         if (req.headers.connection === "keep-alive") {
+            res.end();
             return;
         }        
     }
 
-    console.log("got get");
+    console.log("Received connection from new client.");
     const stream_page_url_b64 = req.query.target;
     const stream_page_url = Buffer.from(stream_page_url_b64, "base64").toString("utf-8");
 
@@ -70,8 +70,6 @@ app.get("/", async (req, res) => {
     let previousSegmentName = "";
     let connection_closed = false;
     (function streamIter() {
-        console.log("iter");
-        // console.log("iter");
         // request m3u8 playlist file
         request({ url: stream_data.url, headers: stream_data.headers, method: "GET", timeout: 1000 }, (error, _, body) => {
             // somehting went wrong
