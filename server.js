@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 //// START STREMIO ADDON ////
-const addon_port = 4000;
+const addon_port = 6000;
 const { serveHTTP, publishToCentral } = require("stremio-addon-sdk");
 const addonInterface = require("./addon");
 serveHTTP(addonInterface, { port: addon_port });
@@ -11,7 +11,7 @@ serveHTTP(addonInterface, { port: addon_port });
 // for more information on deploying, see: https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/deploying/README.md
 
 //// START HLS PROXY ////
-const proxy_port = 5000;
+const proxy_port = 7000;
 const app = require("./proxy");
 app.listen(proxy_port, () => {
     console.log(`Started HLS proxy on ${proxy_port}`);
@@ -22,7 +22,7 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const express = require("express");
 
 const service = express();
-const service_port = process.env.PORT || 6000;
+const service_port = process.env.PORT || 8000;
 
 service.use(createProxyMiddleware((pathname, _) => !pathname.match("^/proxy"), {
     target: "http://localhost:4000",
