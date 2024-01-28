@@ -25,12 +25,12 @@ const service = express();
 const service_port = process.env.PORT || 8000;
 
 service.use(createProxyMiddleware((pathname, _) => !pathname.match("^/proxy"), {
-    target: "http://localhost:4000",
+    target: `http://localhost:${addon_port}`,
     changeOrigin: true,
 }));
 
 service.use("/proxy", createProxyMiddleware((pathname, _) => pathname.match("^/proxy"), {
-    target: "http://localhost:5000",
+    target: `http://localhost:${proxy_port}`,
     changeOrigin: true,
     pathRewrite: {
         ["^/proxy"]: "/"
