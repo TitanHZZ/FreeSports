@@ -5,6 +5,9 @@ const { addonBuilder } = require("stremio-addon-sdk")
 const request = require("request");
 const cheerio = require("cheerio");
 
+// if a custom port is set we are running in the server or else, localhost
+const hls_proxy_target = process.env.PORT ? "https://3c7d0158c479-freesports.baby-beamup.club/proxy" : "http://localhost:6000";
+
 function get_streams_data() {
     const url = "https://hd.cricfree.io/";
     return new Promise((resolve, _) => {
@@ -134,7 +137,7 @@ builder.defineStreamHandler((args) => {
         stream_urls.forEach((value) => {
             // get base64 of stream url
             const b64 = Buffer.from(value).toString("base64");
-            result.push({ url: `http://127.0.0.1:4000?target=${b64}` });
+            result.push({ url: `${hls_proxy_target}?target=${b64}` });
         });
     }
 

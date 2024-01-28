@@ -4,7 +4,6 @@ const puppeteer = require('puppeteer');
 const express = require("express");
 const request = require('request');
 const app = express();
-const port = 4000;
 
 function get_stream_url(stream_page_url) {
     return new Promise(async (resolve, _) => {
@@ -57,6 +56,11 @@ app.get("/", async (req, res) => {
 
     console.log("Received connection from new client.");
     const stream_page_url_b64 = req.query.target;
+    if (!stream_page_url_b64) {
+        res.end();
+        return;
+    }
+
     const stream_page_url = Buffer.from(stream_page_url_b64, "base64").toString("utf-8");
 
     // get data for the stream and make sure it is valid
@@ -116,7 +120,4 @@ app.get("/", async (req, res) => {
     });
 });
 
-module.exports = {
-    app,
-    port
-};
+module.exports = app;
