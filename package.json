@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"description": "FreeSports Stremio addon.",
 	"scripts": {
-		"start": "node server.js"
+		"start": "npx puppeteer browsers install chrome && node server.js"
 	},
 	"dependencies": {
 		"@bochilteam/scraper-images": "^1.0.2",
