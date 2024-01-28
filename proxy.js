@@ -8,7 +8,7 @@ const app = express();
 function get_stream_url(stream_page_url) {
     return new Promise(async (resolve, _) => {
         // create bowser instance to get the stream url
-        const browser = await puppeteer.launch({ headless: "new" });
+        const browser = await puppeteer.launch({ headless: "new", executablePath: "./ungoogled-chromium_120.0.6099.129-1.1.AppImage" });
         const [page] = await browser.pages();
         await page.setRequestInterception(true); let found_url = false;
 

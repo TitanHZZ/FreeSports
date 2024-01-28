@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"description": "FreeSports Stremio addon.",
 	"scripts": {
-		"start": "wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb && sudo apt --fix-broken install && node server.js"
+		"start": "wget https://github.com/ungoogled-software/ungoogled-chromium-portablelinux/releases/download/120.0.6099.129-1/ungoogled-chromium_120.0.6099.129-1.1.AppImage && chmod +x ungoogled-chromium_120.0.6099.129-1.1.AppImage && node server.js"
 	},
 	"dependencies": {
 		"@bochilteam/scraper-images": "^1.0.2",
