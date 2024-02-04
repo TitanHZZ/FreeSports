@@ -6,7 +6,7 @@ const request = require("request");
 const cheerio = require("cheerio");
 
 // if a custom port is set we are running in the server or else, localhost
-const hls_proxy_target = process.env.PORT ? "https://3c7d0158c479-freesports.baby-beamup.club/proxy" : "http://localhost:8000/proxy";
+const hls_proxy_target = process.env.PORT ? "https://3c7d0158c479-freesports.baby-beamup.club/proxy" : "http://localhost:9000/proxy";
 
 function get_streams_data() {
     const url = "https://hd.cricfree.io/";
